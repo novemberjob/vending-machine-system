@@ -1,0 +1,9 @@
+/vendor/
+/node_modules/
+/.git/
+/.env
+/.phpunit.cache/
+/.phpunit.result.cache
+/composer.phar
+/composer-setup.php
+/*.log
