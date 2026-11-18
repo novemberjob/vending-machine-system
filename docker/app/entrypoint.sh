@@ -9,22 +9,23 @@ if [ ! -f .env ]; then
 fi
 
 DB_HOST="${DB_HOST:-db}"
+DB_PORT="${DB_PORT:-3306}"
 DB_NAME="${DB_NAME:-vms}"
 DB_USER="${DB_USER:-root}"
 DB_PASS="${DB_PASS:-rootpass}"
 
 echo "Waiting for MySQL at ${DB_HOST}..."
-until mysqladmin ping -h "$DB_HOST" -u "$DB_USER" --password="$DB_PASS" --silent >/dev/null 2>&1; do
+until mysqladmin ping -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" --password="$DB_PASS" --silent >/dev/null 2>&1; do
     sleep 2
 done
 
 echo "Preparing database ${DB_NAME}..."
-mysql -h "$DB_HOST" -u "$DB_USER" --password="$DB_PASS" \
+mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" --password="$DB_PASS" \
     -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # Both migrations are idempotent, so this is safe on every container start.
-mysql -h "$DB_HOST" -u "$DB_USER" --password="$DB_PASS" "$DB_NAME" < migrations/001_schema.sql
-mysql -h "$DB_HOST" -u "$DB_USER" --password="$DB_PASS" "$DB_NAME" < migrations/002_seed.sql
+mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" --password="$DB_PASS" "$DB_NAME" < migrations/001_schema.sql
+mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" --password="$DB_PASS" "$DB_NAME" < migrations/002_seed.sql
 
 echo "Seeding admin user..."
 php scripts/seed_admin.php \

@@ -30,7 +30,7 @@ admin user, and then starts PHP-FPM.
 
 ```bash
 # optional: override defaults before starting
-# set JWT_SECRET, DB_PASS, ADMIN_EMAIL, ADMIN_PASSWORD, APP_URL in your shell or a .env file
+# set JWT_SECRET, DB_PASS, DB_PORT, ADMIN_EMAIL, ADMIN_PASSWORD, APP_URL in your shell or a .env file
 
 docker compose up -d --build
 # open http://localhost:8000/products
@@ -39,6 +39,11 @@ docker compose logs -f app     # PHP-FPM / migrations / seeding
 docker compose logs -f web     # Nginx access and error logs
 docker compose down            # add -v to also remove the database volume
 ```
+
+`DB_PORT` defaults to `3306`. It is used for the MySQL server port, the host port
+mapping, the entrypoint's `mysql`/`mysqladmin` calls, and the app's database connection.
+The PDO connection string is built from `DB_HOST`, `DB_PORT`, and `DB_NAME`;
+no separate connection-string variable is needed.
 
 The `app` container reads configuration from environment variables (they take precedence
 over `.env`), so no local `.env` or MySQL installation is required for Docker usage.

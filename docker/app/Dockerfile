@@ -51,6 +51,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh \
     && chown -R nobody:nobody /var/www/html
 
 ENV DB_HOST=db \
+    DB_PORT=3306 \
     DB_NAME=vms \
     DB_USER=root \
     DB_PASS=rootpass \

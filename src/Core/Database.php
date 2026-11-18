@@ -15,7 +15,11 @@ final class Database
     public static function connection(): PDO
     {
         if (self::$pdo === null) {
-            $dsn  = env('DB_DSN', 'mysql:host=127.0.0.1;dbname=vms;charset=utf8mb4');
+            $host = (string) env('DB_HOST', '127.0.0.1');
+            $port = (string) env('DB_PORT', '3306');
+            $name = (string) env('DB_NAME', 'vms');
+            $dsn  = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
+
             $user = env('DB_USER', 'root');
             $pass = env('DB_PASS', '');
 
